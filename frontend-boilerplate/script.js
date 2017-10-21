@@ -16,12 +16,37 @@ var upIsPressed = false;
 var downIsPressed = false;
 var shootIsPressed = false;
 
+class CannonBall {
+	constructor(c,x,y,dx,dy) {
+		this.c = c;
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+	}
+	move() {
+		if (this.y < 300 && this.x < 500) {
+			//x motion
+			this.x+=this.dx;
+			this.y-= 1;
+		}
+	}
+	draw() {
+		this.c.beginPath();
+		this.c.arc(this.x,this.y,1,0,2*Math.PI);
+		this.c.stroke();
+	}
+	
+}
+
 class Cannon  { //NOTE: angle is in radians
-		constructor(c,rLength,angle) {
+		constructor(c,rLength,angle,strength) {
 			this.c = c;
 			this.rLength = rLength;
 			this.angle= angle;
 			this.dAngle = .1;
+			this.cbCollection = [];
+			this.strength = strength;
 		}
 		getXVector() { 
 			return this.rLength*Math.cos(this.angle);
@@ -39,44 +64,30 @@ class Cannon  { //NOTE: angle is in radians
 				this.angle-=this.dAngle;
 			}
 		}
+		shoot() {
+			this.cbCollection.push(new CannonBall(this.c,this.getXVector(),this.getYVector(),1,1));
+			console.log(this.cbCollection.length);
+		}
 		draw() {
 			this.c.beginPath();
 			this.c.moveTo(0,300);
 			this.c.lineTo(this.getXVector(),this.getYVector());
 			this.c.stroke();
+			this.cbCollection.forEach(function(element) {
+				element.move();
+				element.draw();
+			});
 		}
 }
 
-class CannonBall {
-	constructor(c,x,y,dx,dy) {
-		this.c = c;
-		this.x = x;
-		this.y = y;
-		this.dx = dx;
-		this.dy = dy;
-	}
-	move() {
-		if (this.y > 0) {
-			//x motion
-			this.x+=this.dx;
-			this.y+=this.
-		}
-	}
-	draw() {
-		this.c.beginPath();
-		this.c.arc(this.x,this.y,1,0,2*Math.PI);
-		this.c.stroke();
-	}
-	
-}
+
 function CanvasClear(canvas,context) { c.clearRect(0,0,canvas.width,canvas.height); }
 
 
 window.onload = function() {
 	var canvas = document.getElementById('screen');
 	var ctx = canvas.getContext('2d');
-	var cannon = new Cannon(ctx,20,Math.PI/4);
-	var cbObjects = [];
+	var cannon = new Cannon(ctx,40,Math.PI/4);
 	window.onkeypress = function(e) {
 		if (e.keyCode == UP_KEY) { 
 			cannon.increaseAngle();
@@ -85,7 +96,7 @@ window.onload = function() {
 			cannon.decreaseAngle(); 
 		}
 		else if (e.keyCode == SHOOT_KEY) 
-			cbObjects.push(new CannonBall(ctx,cannon.getXVector(),cannon.getYVector(),1,1));
+			cannon.shoot();
 	};
 	
 	
@@ -93,9 +104,6 @@ window.onload = function() {
 	setInterval(function() {
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		cannon.draw();
-		cbObjects.forEach(function(element) {
-			element.move();
-		});
 	}, GAMELOOP_TIME);
 };
 
