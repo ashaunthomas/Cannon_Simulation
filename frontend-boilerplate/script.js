@@ -16,7 +16,7 @@ var upIsPressed = false;
 var downIsPressed = false;
 var shootIsPressed = false;
 
-class Line  { //NOTE: angle is in radians
+class Cannon  { //NOTE: angle is in radians
 		constructor(c,rLength,angle) {
 			this.c = c;
 			this.rLength = rLength;
@@ -47,14 +47,36 @@ class Line  { //NOTE: angle is in radians
 		}
 }
 
+class CannonBall {
+	constructor(c,x,y,dx,dy) {
+		this.c = c;
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+	}
+	move() {
+		if (this.y > 0) {
+			//x motion
+			this.x+=this.dx;
+			this.y+=this.
+		}
+	}
+	draw() {
+		this.c.beginPath();
+		this.c.arc(this.x,this.y,1,0,2*Math.PI);
+		this.c.stroke();
+	}
+	
+}
 function CanvasClear(canvas,context) { c.clearRect(0,0,canvas.width,canvas.height); }
 
 
 window.onload = function() {
 	var canvas = document.getElementById('screen');
 	var ctx = canvas.getContext('2d');
-	var cannon = new Line(ctx,20,0);
-	
+	var cannon = new Cannon(ctx,20,Math.PI/4);
+	var cbObjects = [];
 	window.onkeypress = function(e) {
 		if (e.keyCode == UP_KEY) { 
 			cannon.increaseAngle();
@@ -63,7 +85,7 @@ window.onload = function() {
 			cannon.decreaseAngle(); 
 		}
 		else if (e.keyCode == SHOOT_KEY) 
-			shootIsPressed = true;
+			cbObjects.push(new CannonBall(ctx,cannon.getXVector(),cannon.getYVector(),1,1));
 	};
 	
 	
@@ -71,6 +93,9 @@ window.onload = function() {
 	setInterval(function() {
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		cannon.draw();
+		cbObjects.forEach(function(element) {
+			element.move();
+		});
 	}, GAMELOOP_TIME);
 };
 
