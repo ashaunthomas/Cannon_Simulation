@@ -47,7 +47,7 @@ class Cannon  { //NOTE: angle is in radians
 			this.c = c;
 			this.rLength = rLength;
 			this.angle= angle;
-			this.dAngle = .1;
+			this.dAngle = .05;
 			this.cbCollection = [];
 		}
 		getXVector() { 
@@ -95,7 +95,7 @@ function CanvasClear(canvas,context) { c.clearRect(0,0,canvas.width,canvas.heigh
 window.onload = function() {
 	var canvas = document.getElementById('screen');
 	var ctx = canvas.getContext('2d');
-	var cannon = new Cannon(ctx,80,Math.PI/4);
+	var cannon = new Cannon(ctx,70,Math.PI/4);
 	var counter = 0;
 	window.onkeypress = function(e) {
 		if (e.keyCode == UP_KEY) { 
