@@ -23,7 +23,6 @@ class CannonBall {
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
-		this.t = 0;
 	}
 	move() {
 		if (this.y < 300 && this.x < 500) {
@@ -44,13 +43,12 @@ class CannonBall {
 }
 
 class Cannon  { //NOTE: angle is in radians
-		constructor(c,rLength,angle,strength) {
+		constructor(c,rLength,angle) {
 			this.c = c;
 			this.rLength = rLength;
 			this.angle= angle;
 			this.dAngle = .1;
 			this.cbCollection = [];
-			this.strength = strength;
 		}
 		getXVector() { 
 			return this.rLength*Math.cos(this.angle);
@@ -75,7 +73,7 @@ class Cannon  { //NOTE: angle is in radians
 			});
 		}
 		shoot() {
-			this.cbCollection.push(new CannonBall(this.c,this.getXVector(),this.getYVector(),1,3));
+			this.cbCollection.push(new CannonBall(this.c,this.getXVector(),this.getYVector(),this.rLength*Math.cos(this.angle)/15,this.rLength*Math.sin(this.angle)/15));
 			console.log(this.cbCollection.length);
 		}
 		draw() {
@@ -97,7 +95,7 @@ function CanvasClear(canvas,context) { c.clearRect(0,0,canvas.width,canvas.heigh
 window.onload = function() {
 	var canvas = document.getElementById('screen');
 	var ctx = canvas.getContext('2d');
-	var cannon = new Cannon(ctx,40,Math.PI/4);
+	var cannon = new Cannon(ctx,80,Math.PI/4);
 	var counter = 0;
 	window.onkeypress = function(e) {
 		if (e.keyCode == UP_KEY) { 
