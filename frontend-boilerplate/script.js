@@ -23,12 +23,16 @@ class CannonBall {
 		this.y = y;
 		this.dx = dx;
 		this.dy = dy;
+		this.t = 0;
 	}
 	move() {
 		if (this.y < 300 && this.x < 500) {
 			//x motion
 			this.x+=this.dx;
-			this.y-= 1;
+			//y motion
+			this.y-=this.dy; 	
+			this.dy-=0.05;
+			
 		}
 	}
 	draw() {
@@ -64,8 +68,14 @@ class Cannon  { //NOTE: angle is in radians
 				this.angle-=this.dAngle;
 			}
 		}
+		changeY() {
+			this.cbCollection.forEach(function(element) {
+				element.dy+=0.5;
+				console.log(element.dy);
+			});
+		}
 		shoot() {
-			this.cbCollection.push(new CannonBall(this.c,this.getXVector(),this.getYVector(),1,1));
+			this.cbCollection.push(new CannonBall(this.c,this.getXVector(),this.getYVector(),1,3));
 			console.log(this.cbCollection.length);
 		}
 		draw() {
@@ -88,6 +98,7 @@ window.onload = function() {
 	var canvas = document.getElementById('screen');
 	var ctx = canvas.getContext('2d');
 	var cannon = new Cannon(ctx,40,Math.PI/4);
+	var counter = 0;
 	window.onkeypress = function(e) {
 		if (e.keyCode == UP_KEY) { 
 			cannon.increaseAngle();
@@ -104,6 +115,7 @@ window.onload = function() {
 	setInterval(function() {
 		ctx.clearRect(0,0,canvas.width,canvas.height);
 		cannon.draw();
+		counter++;
 	}, GAMELOOP_TIME);
 };
 
