@@ -12,9 +12,6 @@ const GAMELOOP_TIME = 16;
 const UP_KEY = 119;
 const DOWN_KEY = 115;
 const SHOOT_KEY = 13;
-var upIsPressed = false;
-var downIsPressed = false;
-var shootIsPressed = false;
 
 class CannonBall {
 	constructor(c,x,y,dx,dy) {
@@ -88,10 +85,6 @@ class Cannon  { //NOTE: angle is in radians
 		}
 }
 
-
-function CanvasClear(canvas,context) { c.clearRect(0,0,canvas.width,canvas.height); }
-
-
 window.onload = function() {
 	var canvas = document.getElementById('screen');
 	var ctx = canvas.getContext('2d');
@@ -107,8 +100,6 @@ window.onload = function() {
 		else if (e.keyCode == SHOOT_KEY) 
 			cannon.shoot();
 	};
-	
-	
 	
 	setInterval(function() {
 		ctx.clearRect(0,0,canvas.width,canvas.height);
